@@ -1,3 +1,5 @@
+using MiniCityBuilder.Orleans.Grains.Helpers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +8,17 @@ builder.Services.AddRazorPages();
 builder.Host.UseOrleansClient(static builder =>
 {
     builder.UseLocalhostClustering();
+})
+.ConfigureServices(sp =>
+{
+    sp.AddRegisterHelpers();  
+});
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(1);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
 var app = builder.Build();
@@ -20,6 +33,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();

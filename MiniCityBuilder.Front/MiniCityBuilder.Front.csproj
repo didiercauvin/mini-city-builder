@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\MiniCityBuilder.Orleans.Contracts\MiniCityBuilder.Orleans.Contracts.csproj" />
+      <ProjectReference Include="..\MiniCityBuilder.Orleans.Grains\MiniCityBuilder.Orleans.Grains.csproj" />
     </ItemGroup>
 
 </Project>

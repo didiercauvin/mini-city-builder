@@ -10,7 +10,10 @@ public class IndexModel : PageModel
     private readonly IClusterClient _grainFactory;
 
     [BindProperty]
-    public string Pseudo { get; set; }
+    public string Login { get; set; }
+    
+    [BindProperty]
+    public string Password { get; set; }
 
     public IndexModel(IClusterClient grainFactory)
     {
@@ -19,15 +22,15 @@ public class IndexModel : PageModel
     
     public async Task<IActionResult> OnPost()
     {
-        if (!string.IsNullOrEmpty(Pseudo))
+        if (!string.IsNullOrEmpty(Login))
         {
-            var playerGrain = _grainFactory.GetGrain<IPlayerGrain>(Pseudo);
+            var playerGrain = _grainFactory.GetGrain<IPlayerGrain>(Login);
             
-            var playerDto = await playerGrain.Login(Pseudo, "");
+            var playerDto = await playerGrain.Login(Login, Password);
 
             if (playerDto != null)
             {
-                //HttpContext.Session.SetString("PLAYER", JsonSerializer.Serialize(playerDto));
+                HttpContext.Session.SetString("PLAYER", JsonSerializer.Serialize(playerDto));
                 return RedirectToPage("/Map");
             }
         }
