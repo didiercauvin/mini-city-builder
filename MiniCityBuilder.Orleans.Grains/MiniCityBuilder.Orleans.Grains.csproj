@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Orleans.Sdk" Version="9.1.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MiniCityBuilder.Orleans.Contracts\MiniCityBuilder.Orleans.Contracts.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Orleans.Runtime">
+        <HintPath>..\..\..\.nuget\packages\microsoft.orleans.runtime\9.1.2\lib\net8.0\Orleans.Runtime.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>
