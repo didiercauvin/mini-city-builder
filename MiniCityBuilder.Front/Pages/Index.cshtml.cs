@@ -5,14 +5,16 @@ namespace MiniCityBuilder.Front.Pages;
 
 public class IndexModel : PageModel
 {
-    private readonly ILogger<IndexModel> _logger;
+    [BindProperty]
+    public string Pseudo { get; set; }
 
-    public IndexModel(ILogger<IndexModel> logger)
+    public IActionResult OnPost()
     {
-        _logger = logger;
-    }
-
-    public void OnGet()
-    {
+        if (!string.IsNullOrEmpty(Pseudo))
+        {
+            // Stocker le pseudo dans la session ou l'envoyer au serveur
+            return RedirectToPage("/Map");
+        }
+        return Page();
     }
 }

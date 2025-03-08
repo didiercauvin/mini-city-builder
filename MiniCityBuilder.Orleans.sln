@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniCityBuilder.Orleans.Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniCityBuilder.Front", "MiniCityBuilder.Front\MiniCityBuilder.Front.csproj", "{9FD8AA74-C120-4448-AD65-7A9D417B79AD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Orleans", "Orleans", "{A96B7204-91AF-4931-B600-A7F5ADB76D33}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{22C952B1-43C5-46D6-90B6-87B70F51175E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,10 @@ Global
 		{9FD8AA74-C120-4448-AD65-7A9D417B79AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FD8AA74-C120-4448-AD65-7A9D417B79AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FD8AA74-C120-4448-AD65-7A9D417B79AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AED362F9-1F24-4FB1-ABD7-D51C87282D70} = {A96B7204-91AF-4931-B600-A7F5ADB76D33}
+		{32CF3E6B-E304-4466-83FF-B1F387B7E178} = {22C952B1-43C5-46D6-90B6-87B70F51175E}
+		{9FD8AA74-C120-4448-AD65-7A9D417B79AD} = {22C952B1-43C5-46D6-90B6-87B70F51175E}
 	EndGlobalSection
 EndGlobal
