@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniCityBuilder.Orleans.Host", "MiniCityBuilder.Orleans.Host\MiniCityBuilder.Orleans.Host.csproj", "{AED362F9-1F24-4FB1-ABD7-D51C87282D70}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniCityBuilder.Orleans.WebApi", "MiniCityBuilder.Orleans.WebApi\MiniCityBuilder.Orleans.WebApi.csproj", "{32CF3E6B-E304-4466-83FF-B1F387B7E178}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniCityBuilder.Front", "MiniCityBuilder.Front\MiniCityBuilder.Front.csproj", "{9FD8AA74-C120-4448-AD65-7A9D417B79AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{AED362F9-1F24-4FB1-ABD7-D51C87282D70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AED362F9-1F24-4FB1-ABD7-D51C87282D70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AED362F9-1F24-4FB1-ABD7-D51C87282D70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32CF3E6B-E304-4466-83FF-B1F387B7E178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32CF3E6B-E304-4466-83FF-B1F387B7E178}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32CF3E6B-E304-4466-83FF-B1F387B7E178}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32CF3E6B-E304-4466-83FF-B1F387B7E178}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FD8AA74-C120-4448-AD65-7A9D417B79AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FD8AA74-C120-4448-AD65-7A9D417B79AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FD8AA74-C120-4448-AD65-7A9D417B79AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FD8AA74-C120-4448-AD65-7A9D417B79AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
