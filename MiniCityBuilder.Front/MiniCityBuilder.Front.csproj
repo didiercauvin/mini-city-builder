@@ -10,4 +10,8 @@
         <PackageReference Include="Microsoft.Orleans.Client" Version="9.1.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\MiniCityBuilder.Orleans.Contracts\MiniCityBuilder.Orleans.Contracts.csproj" />
+    </ItemGroup>
+
 </Project>

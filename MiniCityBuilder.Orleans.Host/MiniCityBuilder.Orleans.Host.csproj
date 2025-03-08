@@ -12,4 +12,8 @@
         <PackageReference Include="OrleansDashboard" Version="8.2.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\MiniCityBuilder.Orleans.Grains\MiniCityBuilder.Orleans.Grains.csproj" />
+    </ItemGroup>
+
 </Project>

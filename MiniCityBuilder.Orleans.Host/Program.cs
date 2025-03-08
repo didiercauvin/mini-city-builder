@@ -6,8 +6,7 @@ using var host = Host.CreateDefaultBuilder(args)
         siloBuilder.UseLocalhostClustering();
         siloBuilder.UseDashboard();
 
-        // siloBuilder.AddMemoryGrainStorage("roomStore");
-        // siloBuilder.AddMemoryGrainStorage("playerStore");
+        siloBuilder.AddMemoryGrainStorage("playerStore");
     })
     .Build();
 
