@@ -1,0 +1,14 @@
+@page
+@model MiniCityBuilder.Front.Pages.Map
+@{
+    ViewData["Title"] = "Map prout";
+}
+
+<h1>Coucou</h1>
+<div id="gameContainer"></div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.10/signalr.min.js"></script>
+    <script src="~/js/map.js"></script>
+}
