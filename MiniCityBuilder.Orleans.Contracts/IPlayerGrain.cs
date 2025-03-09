@@ -11,5 +11,5 @@ public class PlayerDto
 
 public interface IPlayerGrain : IGrainWithStringKey
 {
-    Task<PlayerDto?> Login(string username, string password);
+    Task<PlayerDto> Login(string username, string password);
 }

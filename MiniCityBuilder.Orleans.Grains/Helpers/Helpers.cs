@@ -45,7 +45,7 @@ public class JwtTokenGenerator
 
     public string GenerateToken(string username)
     {
-        var secret = _configuration["JwtToken:Secret"]!;
+        var secret = _configuration["JwtToken:Secret"];
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 

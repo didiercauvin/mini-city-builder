@@ -8,8 +8,11 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="9.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
         <PackageReference Include="Microsoft.Orleans.Runtime" Version="9.1.2" />
         <PackageReference Include="Microsoft.Orleans.Sdk" Version="9.1.2" />
+        <PackageReference Include="Microsoft.Orleans.Streaming" Version="9.1.2" />
+        <PackageReference Include="SignalR.Orleans" Version="7.2.0" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.6.1" />
     </ItemGroup>
 

@@ -1,17 +1,22 @@
+using Microsoft.AspNetCore.SignalR;
+using MiniCityBuilder.Front;
+using MiniCityBuilder.Orleans.Grains;
 using MiniCityBuilder.Orleans.Grains.Helpers;
+using SignalR.Orleans.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddSignalR();
+builder.Services.AddHostedService<PlayerEventConsumer>();
+builder.Services.AddRegisterHelpers();
 
 builder.Host.UseOrleansClient(static builder =>
 {
     builder.UseLocalhostClustering();
-})
-.ConfigureServices(sp =>
-{
-    sp.AddRegisterHelpers();  
+    builder.AddMemoryStreams("game");
+    builder.UseSignalR(configure: null);
 });
 
 builder.Services.AddSession(options =>
@@ -41,5 +46,7 @@ app.UseAuthorization();
 app.MapStaticAssets();
 app.MapRazorPages()
     .WithStaticAssets();
+
+app.MapHub<NotificationHub>("/playerhub");
 
 app.Run();

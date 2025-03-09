@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.SignalR;
 using MiniCityBuilder.Orleans.Contracts;
 using MiniCityBuilder.Orleans.Grains.Helpers;
+using Orleans.Streams;
 
 namespace MiniCityBuilder.Orleans.Grains;
 
@@ -16,17 +18,32 @@ public class PlayerGrain : Grain, IPlayerGrain
     private readonly IPersistentState<PlayerState> _playerState;
     private readonly IPasswordHashHelper _passwordHashHelper;
     private readonly JwtTokenGenerator _jwtTokenGenerator;
+    private readonly IClusterClient _client;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
     public PlayerGrain([PersistentState("player", "playerStore")] IPersistentState<PlayerState>  playerState,
         IPasswordHashHelper passwordHashHelper,
-        JwtTokenGenerator  jwtTokenGenerator)
+        JwtTokenGenerator  jwtTokenGenerator,
+        IClusterClient client,
+        IHubContext<NotificationHub> hubContext)
     {
         _playerState = playerState;
         _passwordHashHelper = passwordHashHelper;
         _jwtTokenGenerator = jwtTokenGenerator;
+        _client = client;
+        _hubContext = hubContext;
     }
     
-    public async Task<PlayerDto?> Login(string username, string password)
+    private IAsyncStream<PlayerDto> _stream;
+    
+    public override Task OnActivateAsync(CancellationToken cancellationToken)
+    {
+        var streamProvider = this.GetStreamProvider("game");
+        _stream = streamProvider.GetStream<PlayerDto>("players", new Guid("c3b9c03e-6d4c-4d61-a376-4f4c26d3bd76"));
+        return base.OnActivateAsync(cancellationToken);
+    }
+    
+    public async Task<PlayerDto> Login(string username, string password)
     {
         if (!_playerState.State.Exists)
         {
@@ -49,11 +66,15 @@ public class PlayerGrain : Grain, IPlayerGrain
         await _playerState.WriteStateAsync();
 
         var token  = _jwtTokenGenerator.GenerateToken(username);
-        
-        return new PlayerDto
+
+        var playerDto = new PlayerDto
         {
             UserName = username,
-            Token = ""
+            Token = token
         };
+
+        await _stream.OnNextAsync(playerDto);
+        
+        return playerDto;
     }
 }
