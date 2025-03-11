@@ -4,55 +4,6 @@
     ViewData["Title"] = "Home page";
 }
 
-@section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.10/signalr.min.js"></script>
-    <script src="~/js/map.js"></script>
-    <script>
-        const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/notifications")
-            .build();
-
-        async function loadUsers() {
-            const users = await connection.invoke("GetUsers");
-            document.getElementById("userList").innerHTML = users.map(user => `<li>${user}</li>`).join("");
-        }
-
-        connection.on("PlayerJoined", function (playerId) {
-            console.log("PlayerJoined", playerId);
-            const playerList = document.getElementById("playerList");
-            const playerItem = document.createElement("div");
-            playerItem.textContent = `Player ${playerId} joined the game.`;
-            playerList.appendChild(playerItem);
-        });
-
-        document.getElementById("usersButton").addEventListener("click", async () => {
-            await connection.invoke("GetUsers");
-        });
-
-        // connection.on("ReceiveTestMessage", function(message) {
-        //     console.log("Message reçu:", message);
-        // });
-
-        async function joinGroup() {
-            try {
-                await connection.invoke("AddPlayerToGroup");
-                console.log("Connecté au groupe 'players'");
-            } catch (err) {
-                console.error("Erreur de connexion au groupe :", err);
-            }
-        }
-
-        connection.start().then(function() {
-            console.log("SignalR Connected.");
-            joinGroup(); // Rejoindre le groupe après la connexion
-        }).catch(function(err) {
-            console.error(err.toString());
-        });
-
-    </script>
-}
-
 <form method="post">
     <div>
         <label for="login">Login :</label>
@@ -64,8 +15,3 @@
     </div>
     <button type="submit">Jouer</button>
 </form>
-
-<button type="button" id="usersButton">GetUsers</button>
-
-<h2>Utilisateurs Connectés</h2>
-<ul id="userList"></ul>

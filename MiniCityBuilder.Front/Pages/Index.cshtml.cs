@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -33,7 +34,7 @@ public class IndexModel : PageModel
             {
                 HttpContext.Session.SetString("PLAYER", JsonSerializer.Serialize(playerDto));
 
-                return RedirectToPage("/Map");
+                return Redirect($"/Map?player={playerDto.UserName}");
             }
         }
         return Page();

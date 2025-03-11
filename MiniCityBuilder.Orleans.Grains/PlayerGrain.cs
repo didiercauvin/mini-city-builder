@@ -1,8 +1,5 @@
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.SignalR.Protocol;
 using MiniCityBuilder.Orleans.Contracts;
 using MiniCityBuilder.Orleans.Grains.Helpers;
-using Orleans.Concurrency;
 using SignalR.Orleans.Core;
 
 namespace MiniCityBuilder.Orleans.Grains;
@@ -32,7 +29,6 @@ public class PlayerGrain : Grain, IPlayerGrain
         _passwordHashHelper = passwordHashHelper;
         _jwtTokenGenerator = jwtTokenGenerator;
         _grainFactory = grainFactory;
-        //_hubContext = hubContext;
     }
 
     public override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -73,10 +69,7 @@ public class PlayerGrain : Grain, IPlayerGrain
         };
 
         // Send a message to a single client
-        await _hubContext.Group("players").Send("PlayerJoined", $"Joueur {username} connecté");
-
-        var userManager = _grainFactory.GetGrain<IUserManagerGrain>(0);
-        await userManager.RegisterUser(username);
+        await _hubContext.Group("players").Send("PlayerJoined", username);
 
         return playerDto;
     }

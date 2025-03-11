@@ -12,35 +12,45 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.10/signalr.min.js"></script>
     <script src="~/js/map.js"></script>
     <script>
+        const playerList = document.getElementById("playerList");
+        const urlParams = new URLSearchParams(window.location.search);
+        const playerName = urlParams.get("player");
+
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/notifications")
+            .withUrl("/notifications?player=" + encodeURIComponent(playerName))
             .build();
 
-        async function loadUsers() {
-            const users = await connection.invoke("GetUsers");
-            document.getElementById("userList").innerHTML = users.map(user => `<li>${user}</li>`).join("");
-        }
-
-        connection.on("PlayerJoined", function (playerId) {
-            console.log("PlayerJoined", playerId);
-            const playerList = document.getElementById("playerList");
-            const playerItem = document.createElement("div");
-            playerItem.textContent = `Player ${playerId} joined the game.`;
-            playerList.appendChild(playerItem);
+                // Afficher la liste des joueurs connectés au chargement
+        connection.on("ReceiveConnectedPlayers", (players) => {
+            playerList.innerHTML = "";
+            players.forEach(player => {
+                const li = document.createElement("li");
+                li.textContent = player;
+                playerList.appendChild(li);
+            });
         });
 
-        document.getElementById("testButton").addEventListener("click", async () => {
-            await connection.invoke("SendMessage", "Test message");
+        // Ajouter un joueur nouvellement connecté
+        connection.on("PlayerJoined", (player) => {
+            const li = document.createElement("li");
+            li.textContent = player;
+            playerList.appendChild(li);
         });
 
-        connection.on("ReceiveTestMessage", function(message) {
-            console.log("Message reçu:", message);
+
+        // Retirer un joueur déconnecté
+        connection.on("PlayerDisconnected", (player) => {
+            const items = [...playerList.children];
+            const itemToRemove = items.find(li => li.textContent === player);
+            if (itemToRemove) {
+                playerList.removeChild(itemToRemove);
+            }
         });
 
         async function joinGroup() {
             try {
                 await connection.invoke("AddPlayerToGroup");
-                console.log("Connecté au groupe 'players'");
+                console.log("Connecté au groupe 'players' en tant que " + playerName);
             } catch (err) {
                 console.error("Erreur de connexion au groupe :", err);
             }
@@ -56,7 +66,5 @@
     </script>
 }
 
-<button type="button" id="testButton">Test</button>
-
 <h2>Utilisateurs Connectés</h2>
-<ul id="userList"></ul>
+<ul id="playerList"></ul>

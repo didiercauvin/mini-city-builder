@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using MiniCityBuilder.Orleans.Contracts;
+using Newtonsoft.Json.Linq;
+using System.Collections.Concurrent;
 
 namespace MiniCityBuilder.Orleans.Grains;
 
@@ -9,6 +11,8 @@ public class NotificationHub : Hub
     private readonly IClusterClient _orleansClient;
     private readonly ILogger<NotificationHub> _logger;
 
+    private static ConcurrentDictionary<string, string> ConnectedPlayers = new();
+
     public NotificationHub(IClusterClient orleansClient,
         ILogger<NotificationHub> logger)
     {
@@ -16,21 +20,38 @@ public class NotificationHub : Hub
         _logger = logger;
     }
 
-    public override Task OnConnectedAsync()
+    public override async Task OnConnectedAsync()
     {
-        _logger.LogInformation("User connected {connectionId}", Context.ConnectionId);
+        var httpContext = Context.GetHttpContext();
+        var player = httpContext?.Request.Query["player"];
 
-        return Task.CompletedTask;
+        if (!string.IsNullOrEmpty(player))
+        {
+            _logger.LogInformation("User connected {connectionId}", Context.ConnectionId);
+
+            // TODO: Vérifier ici si le token est valide (JWT validation, base de données, etc.)
+
+            ConnectedPlayers[Context.ConnectionId] = player.ToString();
+
+            // Envoyer la liste des joueurs connectés au nouvel arrivant
+            await Clients.Caller.SendAsync("ReceiveConnectedPlayers", ConnectedPlayers.Values);
+        }
+
+        await base.OnConnectedAsync();
+    }
+
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        if (ConnectedPlayers.TryRemove(Context.ConnectionId, out var playerName))
+        {
+            // Notifier les autres joueurs de la déconnexion
+            await Clients.All.SendAsync("PlayerDisconnected", playerName);
+        }
+
+        await base.OnDisconnectedAsync(exception);
     }
 
     public async Task SendMessage(string message) => await Clients.Groups("players").SendAsync("PlayerJoined", message);
-
-    public async Task GetUsers()
-    {
-        var userManager = _orleansClient.GetGrain<IUserManagerGrain>(0);
-        var users = await userManager.GetUsers();
-        await Clients.Group("players").SendAsync("PlayerJoined", (string.Join(",", users)));
-    }
 
     public async Task AddPlayerToGroup()
     {
