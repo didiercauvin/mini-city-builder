@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "MiniCityBuilder.Orleans.Host": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

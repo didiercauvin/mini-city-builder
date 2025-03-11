@@ -13,8 +13,13 @@
     <script src="~/js/map.js"></script>
     <script>
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/playerHub")
+            .withUrl("/notifications")
             .build();
+
+        async function loadUsers() {
+            const users = await connection.invoke("GetUsers");
+            document.getElementById("userList").innerHTML = users.map(user => `<li>${user}</li>`).join("");
+        }
 
         connection.on("PlayerJoined", function (playerId) {
             console.log("PlayerJoined", playerId);
@@ -24,9 +29,34 @@
             playerList.appendChild(playerItem);
         });
 
+        document.getElementById("testButton").addEventListener("click", async () => {
+            await connection.invoke("SendMessage", "Test message");
+        });
 
-        connection.start().catch(err => console.error(err.toString()));
+        connection.on("ReceiveTestMessage", function(message) {
+            console.log("Message reçu:", message);
+        });
+
+        async function joinGroup() {
+            try {
+                await connection.invoke("AddPlayerToGroup");
+                console.log("Connecté au groupe 'players'");
+            } catch (err) {
+                console.error("Erreur de connexion au groupe :", err);
+            }
+        }
+
+        connection.start().then(function() {
+            console.log("SignalR Connected.");
+            joinGroup(); // Rejoindre le groupe après la connexion
+        }).catch(function(err) {
+            console.error(err.toString());
+        });
+
     </script>
 }
 
-<div id="playerList"></div>
+<button type="button" id="testButton">Test</button>
+
+<h2>Utilisateurs Connectés</h2>
+<ul id="userList"></ul>

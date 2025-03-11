@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.Protocol;
 using MiniCityBuilder.Orleans.Contracts;
 using MiniCityBuilder.Orleans.Grains.Helpers;
-using Orleans.Streams;
+using Orleans.Concurrency;
+using SignalR.Orleans.Core;
 
 namespace MiniCityBuilder.Orleans.Grains;
 
@@ -18,31 +20,28 @@ public class PlayerGrain : Grain, IPlayerGrain
     private readonly IPersistentState<PlayerState> _playerState;
     private readonly IPasswordHashHelper _passwordHashHelper;
     private readonly JwtTokenGenerator _jwtTokenGenerator;
-    private readonly IClusterClient _client;
-    private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly IGrainFactory _grainFactory;
+    private HubContext<NotificationHub> _hubContext;
 
     public PlayerGrain([PersistentState("player", "playerStore")] IPersistentState<PlayerState>  playerState,
         IPasswordHashHelper passwordHashHelper,
         JwtTokenGenerator  jwtTokenGenerator,
-        IClusterClient client,
-        IHubContext<NotificationHub> hubContext)
+        IGrainFactory grainFactory)
     {
         _playerState = playerState;
         _passwordHashHelper = passwordHashHelper;
         _jwtTokenGenerator = jwtTokenGenerator;
-        _client = client;
-        _hubContext = hubContext;
+        _grainFactory = grainFactory;
+        //_hubContext = hubContext;
     }
-    
-    private IAsyncStream<PlayerDto> _stream;
-    
+
     public override Task OnActivateAsync(CancellationToken cancellationToken)
     {
-        var streamProvider = this.GetStreamProvider("game");
-        _stream = streamProvider.GetStream<PlayerDto>("players", new Guid("c3b9c03e-6d4c-4d61-a376-4f4c26d3bd76"));
+        _hubContext = _grainFactory.GetHub<NotificationHub>();
+
         return base.OnActivateAsync(cancellationToken);
     }
-    
+
     public async Task<PlayerDto> Login(string username, string password)
     {
         if (!_playerState.State.Exists)
@@ -73,8 +72,12 @@ public class PlayerGrain : Grain, IPlayerGrain
             Token = token
         };
 
-        await _stream.OnNextAsync(playerDto);
-        
+        // Send a message to a single client
+        await _hubContext.Group("players").Send("PlayerJoined", $"Joueur {username} connecté");
+
+        var userManager = _grainFactory.GetGrain<IUserManagerGrain>(0);
+        await userManager.RegisterUser(username);
+
         return playerDto;
     }
 }

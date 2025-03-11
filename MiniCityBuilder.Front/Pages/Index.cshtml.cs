@@ -2,6 +2,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MiniCityBuilder.Orleans.Contracts;
+using MiniCityBuilder.Orleans.Grains;
 
 namespace MiniCityBuilder.Front.Pages;
 
@@ -31,6 +32,7 @@ public class IndexModel : PageModel
             if (playerDto != null)
             {
                 HttpContext.Session.SetString("PLAYER", JsonSerializer.Serialize(playerDto));
+
                 return RedirectToPage("/Map");
             }
         }

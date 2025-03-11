@@ -1,23 +1,24 @@
-using Microsoft.AspNetCore.SignalR;
-using MiniCityBuilder.Front;
+using MiniCityBuilder.Orleans.Contracts;
 using MiniCityBuilder.Orleans.Grains;
 using MiniCityBuilder.Orleans.Grains.Helpers;
-using SignalR.Orleans.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services
+    // Adds an IClusterClient to the service provider.
+    .AddOrleansClient(clientBuilder =>
+    {
+        // Tell the client how to connect to Orleans (you'll need to customize this for yourself)
+        clientBuilder.UseLocalhostClustering();
+        // Tells the client how to connect to the SignalR.Orleans backplane.
+        clientBuilder.UseSignalR(config: null);
+    })
+    .AddSignalR()
+    .AddOrleans();  // Adds SignalR hubs to the web application
+
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddSignalR();
-builder.Services.AddHostedService<PlayerEventConsumer>();
 builder.Services.AddRegisterHelpers();
-
-builder.Host.UseOrleansClient(static builder =>
-{
-    builder.UseLocalhostClustering();
-    builder.AddMemoryStreams("game");
-    builder.UseSignalR(configure: null);
-});
 
 builder.Services.AddSession(options =>
 {
@@ -47,6 +48,14 @@ app.MapStaticAssets();
 app.MapRazorPages()
     .WithStaticAssets();
 
-app.MapHub<NotificationHub>("/playerhub");
+app.MapHub<NotificationHub>("/notifications");
+
+//var grainFactory = app.Services.GetRequiredService<IGrainFactory>();
+//var friend = grainFactory.GetGrain<IUserManagerGrain>(0);
+
+//var manager = new UserLoginObserver();
+//var obj = grainFactory.CreateObjectReference<IUserLoginObserver>(manager);
+
+//await friend.Subscribe(obj);
 
 app.Run();
