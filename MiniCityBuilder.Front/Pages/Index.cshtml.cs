@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MiniCityBuilder.Orleans.Contracts;
 using MiniCityBuilder.Orleans.Grains;
+using Newtonsoft.Json.Linq;
 
 namespace MiniCityBuilder.Front.Pages;
 
@@ -21,6 +22,16 @@ public class IndexModel : PageModel
     {
         _grainFactory = grainFactory;
     }
+
+    public IActionResult OnGet()
+    {
+        if (User.Identity.IsAuthenticated)
+        {
+            return Redirect($"/Map?player={User.Identity.Name}");
+        }
+
+        return Page();
+    }
     
     public async Task<IActionResult> OnPost()
     {
@@ -32,7 +43,13 @@ public class IndexModel : PageModel
 
             if (playerDto != null)
             {
-                HttpContext.Session.SetString("PLAYER", JsonSerializer.Serialize(playerDto));
+                Response.Cookies.Append("jwt", playerDto.Token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddHours(1)
+                });
 
                 return Redirect($"/Map?player={playerDto.UserName}");
             }

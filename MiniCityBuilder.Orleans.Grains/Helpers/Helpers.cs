@@ -47,16 +47,16 @@ public class JwtTokenGenerator
     {
         var secret = _configuration["JwtToken:Secret"];
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
-        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
         var claims = new[]
         {
-            new Claim("username", username)
+            new Claim(ClaimTypes.Name, username)
         };
 
         var token = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.Now.AddDays(-1),
+            expires: DateTime.Now.AddDays(1),
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

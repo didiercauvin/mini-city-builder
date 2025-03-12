@@ -16,6 +16,10 @@
         const urlParams = new URLSearchParams(window.location.search);
         const playerName = urlParams.get("player");
 
+        if (!playerName) {
+
+        }
+
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("/notifications?player=" + encodeURIComponent(playerName))
             .build();

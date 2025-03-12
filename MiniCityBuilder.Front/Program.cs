@@ -1,6 +1,11 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using MiniCityBuilder.Orleans.Contracts;
 using MiniCityBuilder.Orleans.Grains;
 using MiniCityBuilder.Orleans.Grains.Helpers;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +32,34 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(x =>
+    {
+        x.RequireHttpsMetadata = false;
+        x.SaveToken = true;
+        x.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("3dcaeba6e31ca7a01b99c26dc7a036221a82c71dc6f6576d1557ff3abff1a096")),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+
+        x.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                // Vérifier si un cookie nommé "jwt" existe
+                context.Token = context.Request.Cookies["jwt"];
+                return Task.CompletedTask;
+            }
+        };
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,10 +70,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseMiddleware<JwtMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseSession();
 app.UseRouting();
+app.UseCookiePolicy();
 
 app.UseAuthorization();
 
@@ -49,13 +85,5 @@ app.MapRazorPages()
     .WithStaticAssets();
 
 app.MapHub<NotificationHub>("/notifications");
-
-//var grainFactory = app.Services.GetRequiredService<IGrainFactory>();
-//var friend = grainFactory.GetGrain<IUserManagerGrain>(0);
-
-//var manager = new UserLoginObserver();
-//var obj = grainFactory.CreateObjectReference<IUserLoginObserver>(manager);
-
-//await friend.Subscribe(obj);
 
 app.Run();

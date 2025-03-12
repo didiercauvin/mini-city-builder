@@ -33,8 +33,9 @@ public class NotificationHub : Hub
 
             ConnectedPlayers[Context.ConnectionId] = player.ToString();
 
+            var connected = ConnectedPlayers.Values.Select(p => p.ToString()).Distinct().ToList();
             // Envoyer la liste des joueurs connectés au nouvel arrivant
-            await Clients.Caller.SendAsync("ReceiveConnectedPlayers", ConnectedPlayers.Values);
+            await Clients.All.SendAsync("ReceiveConnectedPlayers", connected);
         }
 
         await base.OnConnectedAsync();
