@@ -20,4 +20,14 @@
       <ProjectReference Include="..\MiniCityBuilder.Orleans.Grains\MiniCityBuilder.Orleans.Grains.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="wwwroot\Map\sample.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="wwwroot\Map\sample.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

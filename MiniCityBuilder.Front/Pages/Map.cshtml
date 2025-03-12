@@ -8,9 +8,9 @@
 <div id="gameContainer"></div>
 
 @section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
+    <script src="https://pixijs.download/release/pixi.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.10/signalr.min.js"></script>
-    <script src="~/js/map.js"></script>
+    <script type="module" src="~/js/map.js"></script>
     <script>
         const playerList = document.getElementById("playerList");
         const urlParams = new URLSearchParams(window.location.search);
