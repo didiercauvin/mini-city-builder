@@ -18,6 +18,7 @@
     <ItemGroup>
       <ProjectReference Include="..\MiniCityBuilder.Orleans.Contracts\MiniCityBuilder.Orleans.Contracts.csproj" />
       <ProjectReference Include="..\MiniCityBuilder.Orleans.Grains\MiniCityBuilder.Orleans.Grains.csproj" />
+      <ProjectReference Include="..\MiniCityBuilder.Orleans.ServiceDefaults\MiniCityBuilder.Orleans.ServiceDefaults.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniCityBuilder.Orleans.Host", "MiniCityBuilder.Orleans.Host\MiniCityBuilder.Orleans.Host.csproj", "{AED362F9-1F24-4FB1-ABD7-D51C87282D70}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniCityBuilder.Orleans.WebApi", "MiniCityBuilder.Orleans.WebApi\MiniCityBuilder.Orleans.WebApi.csproj", "{32CF3E6B-E304-4466-83FF-B1F387B7E178}"
@@ -13,6 +16,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniCityBuilder.Orleans.Contracts", "MiniCityBuilder.Orleans.Contracts\MiniCityBuilder.Orleans.Contracts.csproj", "{4A22D957-0076-4F8D-A95D-396B0B330D54}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniCityBuilder.Orleans.Grains", "MiniCityBuilder.Orleans.Grains\MiniCityBuilder.Orleans.Grains.csproj", "{9DB8ABA1-BE1C-47ED-BBF6-1098A52E2EC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniCityBuilder.Orleans.AppHost", "MiniCityBuilder.Orleans.AppHost\MiniCityBuilder.Orleans.AppHost.csproj", "{8C955A0E-E9E4-4C70-AA75-F0D0ED4B1A81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniCityBuilder.Orleans.ServiceDefaults", "MiniCityBuilder.Orleans.ServiceDefaults\MiniCityBuilder.Orleans.ServiceDefaults.csproj", "{F5538565-6775-82E1-DFBB-1303D968DF04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +47,17 @@ Global
 		{9DB8ABA1-BE1C-47ED-BBF6-1098A52E2EC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DB8ABA1-BE1C-47ED-BBF6-1098A52E2EC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DB8ABA1-BE1C-47ED-BBF6-1098A52E2EC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C955A0E-E9E4-4C70-AA75-F0D0ED4B1A81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C955A0E-E9E4-4C70-AA75-F0D0ED4B1A81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C955A0E-E9E4-4C70-AA75-F0D0ED4B1A81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C955A0E-E9E4-4C70-AA75-F0D0ED4B1A81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5538565-6775-82E1-DFBB-1303D968DF04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5538565-6775-82E1-DFBB-1303D968DF04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5538565-6775-82E1-DFBB-1303D968DF04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5538565-6775-82E1-DFBB-1303D968DF04}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{AED362F9-1F24-4FB1-ABD7-D51C87282D70} = {A96B7204-91AF-4931-B600-A7F5ADB76D33}

@@ -9,6 +9,8 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 builder.Services
     // Adds an IClusterClient to the service provider.
     .AddOrleansClient(clientBuilder =>
@@ -24,6 +26,8 @@ builder.Services
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddRegisterHelpers();
+
+//builder.AddServiceDefaults();
 
 builder.Services.AddSession(options =>
 {
@@ -53,7 +57,7 @@ builder.Services.AddAuthentication(x =>
         {
             OnMessageReceived = context =>
             {
-                // Vérifier si un cookie nommé "jwt" existe
+                // VÃ©rifier si un cookie nommÃ© "jwt" existe
                 context.Token = context.Request.Cookies["jwt"];
                 return Task.CompletedTask;
             }
@@ -61,6 +65,8 @@ builder.Services.AddAuthentication(x =>
     });
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
