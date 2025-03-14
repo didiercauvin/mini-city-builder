@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using MiniCityBuilder.Orleans.Grains.Helpers;
 using MiniCityBuilder.Orleans.Host;
+using Orleans.Configuration;
 using Orleans.Runtime;
 using System.Reflection.PortableExecutable;
 using static Microsoft.AspNetCore.Http.TypedResults;
@@ -48,14 +49,24 @@ using var host = Host.CreateDefaultBuilder(args)
     })
     .UseOrleans(siloBuilder =>
     {
-        var clusterId = Environment.GetEnvironmentVariable("ORLEANS_CLUSTER_ID") ?? "default";
+        siloBuilder.UseLocalhostClustering(clusterId: "default", serviceId: "default");
+        //siloBuilder.UseAdoNetClustering(options =>
+        //{
+        //    options.Invariant = "System.Data.SqlClient"; // Pour SQL Server
+        //    options.ConnectionString = "Server=sqlserver;Database=OrleansCluster;Integrated Security=true;TrustServerCertificate=True";
+        //});
 
-        siloBuilder.UseLocalhostClustering(clusterId: clusterId, serviceId: clusterId);
         siloBuilder.UseDashboard(options =>
         {
             //options.Port = int.Parse(Environment.GetEnvironmentVariable("DASHBOARD_PORT") ?? "0");
             options.HostSelf = true;
             options.CounterUpdateIntervalMs = 5000;
+        });
+
+        siloBuilder.Configure<ClusterOptions>(options =>
+        {
+            options.ClusterId = "default";
+            options.ServiceId = "default";
         });
 
         siloBuilder

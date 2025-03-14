@@ -1,9 +1,13 @@
-using k8s.KubeConfigModels;
+using Aspire.Hosting;
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-const string clusterId = "default"; // Ou utilisez l'ID que vous préférez
+var connectionString = builder.AddConnectionString("clusterdb").Resource;
+
+var db = builder
+            .AddSqlServer("orleans-db")
+            .WithConnectionStringRedirection(connectionString);
 
 var orleans = builder.AddOrleans("default")
     .WithDevelopmentClustering()
@@ -14,7 +18,8 @@ var orleansBuilder = builder.AddProject<MiniCityBuilder_Orleans_Host>("silo")
     .WithReference(orleans)
     .WithReplicas(3)
     .WithEnvironment("ASPNETCORE_URLS", "http://0.0.0.0:0")
-    .WithEnvironment("ORLEANS_CLUSTER_ID", clusterId);
+    .WithReference(db)
+    .WaitFor(db);
 
 
 builder.AddProject<Projects.MiniCityBuilder_Front>("minicitybuilder-front")
