@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using MiniCityBuilder.Orleans.Grains.Helpers;
 using MiniCityBuilder.Orleans.Host;
 using Orleans.Runtime;
@@ -29,10 +30,13 @@ using var host = Host.CreateDefaultBuilder(args)
         config.Configure(app =>
         {
             app.UseRouting();
+            app.UseOrleansDashboard();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecksWithJsonResponse("/health");
             });
+
+            //app.Map("/dashboard", x => x.UseOrleansDashboard());
         });
 
         // N'oubliez pas d'ajouter ceci pour configurer les services web
@@ -47,7 +51,13 @@ using var host = Host.CreateDefaultBuilder(args)
         var clusterId = Environment.GetEnvironmentVariable("ORLEANS_CLUSTER_ID") ?? "default";
 
         siloBuilder.UseLocalhostClustering(clusterId: clusterId, serviceId: clusterId);
-        siloBuilder.UseDashboard();
+        siloBuilder.UseDashboard(options =>
+        {
+            //options.Port = int.Parse(Environment.GetEnvironmentVariable("DASHBOARD_PORT") ?? "0");
+            options.HostSelf = true;
+            options.CounterUpdateIntervalMs = 5000;
+        });
+
         siloBuilder
             .AddMemoryGrainStorage("playerStore")
             .AddMemoryGrainStorage("PubSubStore")

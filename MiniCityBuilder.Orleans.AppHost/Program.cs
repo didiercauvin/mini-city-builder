@@ -12,7 +12,8 @@ var orleans = builder.AddOrleans("default")
 
 var orleansBuilder = builder.AddProject<MiniCityBuilder_Orleans_Host>("silo")
     .WithReference(orleans)
-    .WithReplicas(1)
+    .WithReplicas(3)
+    .WithEnvironment("ASPNETCORE_URLS", "http://0.0.0.0:0")
     .WithEnvironment("ORLEANS_CLUSTER_ID", clusterId);
 
 
