@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using MiniCityBuilder.Orleans.Contracts;
 using MiniCityBuilder.Orleans.Grains;
 using MiniCityBuilder.Orleans.Grains.Helpers;
+using Orleans.Configuration;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("OrleansCluster") ?? "Server=localhost;Database=OrleansCluster;Integrated Security=true;TrustServerCertificate=True";
 
 builder.AddServiceDefaults();
 
@@ -15,8 +15,22 @@ builder.Services
     // Adds an IClusterClient to the service provider.
     .AddOrleansClient(clientBuilder =>
     {
+        //clientBuilder.UseAzureStorageClustering(options => options.TableServiceClient = new Azure.Data.Tables.TableServiceClient("UseDevelopmentStorage=true"));
+
         // Tell the client how to connect to Orleans (you'll need to customize this for yourself)
-        clientBuilder.UseLocalhostClustering();
+        //clientBuilder.UseLocalhostClustering();
+        clientBuilder.UseAdoNetClustering(options =>
+        {
+            options.Invariant = "System.Data.SqlClient"; // Pour SQL Server
+            options.ConnectionString = connectionString;
+        });
+
+        clientBuilder.Configure<ClusterOptions>(options =>
+        {
+            options.ClusterId = "minicitybuilder-orleans";
+            options.ServiceId = "minicitybuilder-orleans";
+        });
+
         // Tells the client how to connect to the SignalR.Orleans backplane.
         clientBuilder.UseSignalR(config: null);
     })

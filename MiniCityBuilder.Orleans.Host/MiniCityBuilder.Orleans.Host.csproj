@@ -8,12 +8,16 @@
   </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="9.0.3" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
         <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="9.1.2" />
+        <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="9.1.2" />
+        <PackageReference Include="Microsoft.Orleans.Sdk" Version="9.1.2" />
         <PackageReference Include="Microsoft.Orleans.Server" Version="9.1.2" />
         <PackageReference Include="OrleansDashboard" Version="8.2.0" />
         <PackageReference Include="SignalR.Orleans" Version="7.2.0" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -25,7 +29,6 @@
       <Content Include="appsettings.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
-      <None Remove="Properties\launchSettings.json" />
     </ItemGroup>
 
 </Project>

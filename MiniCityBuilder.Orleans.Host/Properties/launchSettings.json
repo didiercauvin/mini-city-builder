@@ -1,10 +1,22 @@
 {
   "profiles": {
-    "MiniCityBuilder.Orleans.Host": {
+    "Silo1": {
       "commandName": "Project",
       "environmentVariables": {
+        "ORLEANS_SILO_PORT": "11111",
+        "ORLEANS_GATEWAY_PORT": "30001",
         "DOTNET_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "http://localhost:5000"
+    },
+    "Silo2": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ORLEANS_SILO_PORT": "11112",
+        "ORLEANS_GATEWAY_PORT": "30002",
+        "DOTNET_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5001"
     }
   }
 }
